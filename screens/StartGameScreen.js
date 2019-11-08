@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  Text,
-  TextInput,
   Button,
   TouchableWithoutFeedback,
   Keyboard,
@@ -13,8 +11,12 @@ import {
 import Card from "../components/Card";
 import Input from "../components/Input";
 import Colors from "../constants/colors";
+import NumberContainer from "../components/NumberContainer";
+import BodyText from "../components/BodyText";
+import TitleText from "../components/TitleText";
+import MainButton from "../components/MainButton";
 
-const StartGameScreen = () => {
+const StartGameScreen = props => {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState();
@@ -41,12 +43,21 @@ const StartGameScreen = () => {
     setConfirmed(true);
     setSelectedNumber(chosenNumber);
     setEnteredValue("");
+    Keyboard.dismiss();
   };
 
   let confirmedOutput;
 
   if (confirmed) {
-    confirmedOutput = <Text>Chosen Number: {selectedNumber}</Text>;
+    confirmedOutput = (
+      <Card style={styles.summaryContainer}>
+        <BodyText>Your Number</BodyText>
+        <NumberContainer>{selectedNumber}</NumberContainer>
+        <MainButton onPress={() => props.onStartGame(selectedNumber)}>
+          START GAME
+        </MainButton>
+      </Card>
+    );
   }
 
   return (
@@ -56,9 +67,9 @@ const StartGameScreen = () => {
       }}
     >
       <View style={styles.screen}>
-        <Text style={styles.title}>Start A New Game!</Text>
+        <TitleText style={styles.title}>Is your Phone Smart?</TitleText>
         <Card style={styles.inputContainer}>
-          <Text>Select a Number</Text>
+          <BodyText>Select a Number</BodyText>
           <Input
             style={styles.input}
             blurOnSubmit
@@ -101,7 +112,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    marginVertical: 10
+    marginVertical: 40,
+    fontFamily: "open-sans-bold"
   },
   inputContainer: {
     width: 300,
@@ -115,11 +127,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15
   },
   button: {
-    width: "50%"
+    width: 100
   },
   input: {
     width: "25%",
     textAlign: "center"
+  },
+  summaryContainer: {
+    marginTop: 40,
+    alignItems: "center"
   }
 });
 
